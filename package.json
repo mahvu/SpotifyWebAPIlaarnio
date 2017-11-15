@@ -1,0 +1,42 @@
+{
+  "name": "spotifywebapilaarnio",
+  "version": "1.0.0",
+  "description": "A small application for fetching data through Spotify's Web API",
+  "main": "app.js",
+  "scripts": {
+    "babel": "babel --presets env js/main.js -o build/main.bundle.js",
+    "webpack": "webpack",
+    "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
+    "start:dev": "webpack-dev-server --inline --content-base public/ --history-api-fallback",
+    "start:prod": "webpack && node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mahvu/SpotifyWebAPIlaarnio.git"
+  },
+  "keywords": [
+    "spotify"
+  ],
+  "author": "Lauri Rasi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mahvu/SpotifyWebAPIlaarnio/issues"
+  },
+  "homepage": "https://github.com/mahvu/SpotifyWebAPIlaarnio#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "webpack": "^3.8.1",
+    "webpack-dev-server": "^2.9.4"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.2",
+    "lodash": "^4.17.4",
+    "querystring": "^0.2.0",
+    "react": "^16.1.1",
+    "react-dom": "^16.1.1",
+    "request": "^2.83.0"
+  }
+}
