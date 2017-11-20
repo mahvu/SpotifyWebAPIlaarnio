@@ -2,9 +2,9 @@ const path = require('path');
 require('webpack');
 
 module.exports = {
-  entry: './app.js',
+  entry: './index.js',
   output: {
-    path: path.resolve(__dirname, 'build'),
+    path: path.resolve(__dirname, 'public'),
     filename: 'bundle.js'
   },
   module: {
@@ -14,7 +14,7 @@ module.exports = {
         loader: 'babel-loader',
         exclude: /node_modules/,
         query: {
-          presets: ['env']
+          presets: ['env', 'react']
         }
       }
     ]

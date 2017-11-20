@@ -1,0 +1,83 @@
+body {
+  background: #121314;
+  color: #ddd;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 8pt;
+  font-weight: 300;
+  overflow: hidden;
+}
+
+a {
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+a.login {
+    display: inline-block;
+    text-align: center;
+    background-color: #070;
+    color: #fff;
+    padding: 10px 40px;
+    border-radius: 50px;
+}
+
+a.logout {
+  font-size: 20px;
+}
+
+.top {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 80px;
+    width: 100%;
+    background-color: #222326;
+    border-bottom: 1px solid #393b40;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.top .usercontainer {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    padding: 12px;
+    text-align: right;
+}
+
+.top .titlecontainer {
+    position: absolute;
+    left: 150px;
+    right: 150px;
+    top: 0px;
+    text-align: center;
+    padding: 12px;
+}
+
+.mid {
+    position: absolute;
+    left: 0px;
+    top: 80px;
+    bottom: 80px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.searchTypeSelector {
+  padding-left: 20px;
+}
+
+.searchInput {
+  padding-left: 20px;
+}
+.searchResults{
+
+}
+
+.searchResults li{
+  font-size: 14px;
+}
