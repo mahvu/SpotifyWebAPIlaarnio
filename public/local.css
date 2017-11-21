@@ -74,6 +74,11 @@ a.logout {
 .searchInput {
   padding-left: 20px;
 }
+
+.resultsToShowSelector {
+  padding-left: 20px;
+}
+
 .searchResults{
 
 }

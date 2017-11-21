@@ -38,12 +38,13 @@ router.get('/login', (_, res) => {
 });
 
 //not the most elegant way, but for the purpose of this demo, it works.
-router.get('/logout', (req, res) => {
+router.get('/logout', (_, res) => {
   spotifyApi.resetAccessToken();
   spotifyApi.resetRefreshToken();
   res.redirect('/#/');
 });
 
+//Might be a good idea to have endpoints for each type
 router.get('/search/:type/:name', (req, res) => {
 
   //check type for artist, track, album or playlist
@@ -54,7 +55,7 @@ router.get('/search/:type/:name', (req, res) => {
 
   //redirect according to type
   if(type === 'artist'){
-    spotifyApi.searchArtists(name)
+    spotifyApi.searchArtists(name, { limit: 50})
       .then(function(data) {
         res.status(200).json(data.body.artists);
       }, function(err) {
@@ -62,7 +63,7 @@ router.get('/search/:type/:name', (req, res) => {
       });
   }
   else if(type === 'track'){
-    spotifyApi.searchTracks(name)
+    spotifyApi.searchTracks(name, { limit: 50})
       .then(function(data) {
         res.status(200).json(data.body.tracks);
       }, function(err) {
@@ -70,7 +71,7 @@ router.get('/search/:type/:name', (req, res) => {
       });
   }
   else if(type === 'album'){
-    spotifyApi.searchAlbums(name)
+    spotifyApi.searchAlbums(name, { limit: 50})
       .then(function(data) {
         res.status(200).json(data.body.albums);
       }, function(err) {
@@ -79,7 +80,7 @@ router.get('/search/:type/:name', (req, res) => {
 
   }
   else if(type === 'playlist'){
-    spotifyApi.searchPlaylists(name)
+    spotifyApi.searchPlaylists(name, { limit: 50})
       .then(function(data) {
         res.status(200).json(data.body.playlists);
       }, function(err) {
