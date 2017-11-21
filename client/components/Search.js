@@ -39,7 +39,6 @@ export default class Search extends React.Component {
     axios.get(`/search/${this.state.queryType}/${this.state.name}`)
       .then(function (response) {
         self.setState({queryResult: response.data.items});
-        //console.log(self.state.queryResult);
       })
       .catch(function (error) {
         console.log(error);
@@ -91,8 +90,6 @@ export default class Search extends React.Component {
           <ul> {data.map( function(data){  return <li key={data.id}> {data.name} </li> } )} </ul>
         </div>
 
-        {this.state.resultsToShow}
-
         <a className="logout" href="/logout"> Log out </a>
 
       </div>
@@ -100,13 +97,3 @@ export default class Search extends React.Component {
   }
 }
 
-/*
-{
-  for (var i = 0; i < this.state.resultsToShow; i++) {
-    return <li key={data[i].id}> {data[i].name} </li>
-  }
-}
-
-//{data.map( function(data){  return <li key={data.id}> {data.name} </li> } )}
-
-*/
