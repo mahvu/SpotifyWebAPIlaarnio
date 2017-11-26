@@ -1,0 +1,125 @@
+/* */
+
+#override-default-foundation-style {
+
+  /* General */
+  background-color: #353334;
+  ul {
+    list-style-type: none;
+  }
+
+   /* Center search bar */
+  .top-bar {
+    text-align:center;
+    background-color: #353334;
+
+    .menu {
+      display: inline-block;
+    }
+  }
+
+  .search-bar {
+    display: inline-block;
+    background-color: #353334;
+  }
+  .search-button {
+    display: inline-block;
+  }
+
+  .menu a, .menu .button {
+    background-color: #5dc1d7;
+  }
+
+  /* Login screen */
+  .login-container {
+    text-align: center;
+    margin-top: 35%;
+  }
+  .login-button {
+    display: inline-block;
+    font-size: 30px;
+  }
+
+  /* Search tabs */
+  .tabs {
+    margin-top: 3%;
+    text-align:center;
+    background-color: #292929;
+    border: 0;  
+  }
+
+  .tabs-title {
+    float:none;
+    display:inline-block;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    font-weight: bold;
+  }
+
+  .tabs-content {
+    background-color: #353334;
+    color: #ffffff;
+    border: 0;
+
+    p{ font-weight: bold;
+       padding: 2%; }
+  }
+
+  .tabs-title > a:focus, .tabs-title > a[aria-selected='true'] {
+    text-decoration: underline;
+  }
+
+
+  .singletab {
+    background-color: #353334;
+    width: 100%;
+  }
+
+  .brighttab {
+    background-color: #353334;
+    width: 100%;
+    padding-bottom: 3%;
+  }
+
+  .darktab {
+    background-color: #292929;
+    width: 100%;
+    padding-bottom: 3%;
+  }
+
+  /* Track tab */
+
+  .track-box {
+    padding: 1%
+  }
+
+  .inline {
+    color: #8a8a8a;
+    display: inline;
+  }
+
+  #duration {
+    color: #ffffff;
+    padding-right: 10%;
+    float: right;
+  }
+
+  /* Log out */
+
+  #logout-button {
+    background-color: #353334;
+    color: black;
+  }
+
+  #authed-user {
+    background-color: #353334;
+  }
+
+  .inlinediv {
+    display:inline-block;
+    
+
+  }
+
+
+}

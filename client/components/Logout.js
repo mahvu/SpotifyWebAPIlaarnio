@@ -6,7 +6,7 @@ export default class Login extends Component {
 
     return (
       <div>
-        <a href="/logout" > Log out</a>
+        <a id="logout-button" href="/logout"> Log out </a>
       </div>
     );
   }

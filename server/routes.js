@@ -16,6 +16,7 @@ const REDIRECT_URI = process.env.REDIRECTURI;
 const STATE_KEY = 'spotify_auth_state';         
 const scopes = ['user-read-private', 'user-read-email'];
 
+
 // configure spotify
 const spotifyApi = new Spotify({
   clientId: CLIENT_ID,
@@ -44,20 +45,47 @@ router.get('/logout', (_, res) => {
   res.redirect('/#/');
 });
 
+router.get('/me', (req, res) => { 
+  spotifyApi.getMe()
+    .then(function(data) {
+      res.status(200).json(data.body);
+    }, function(err) {
+      console.error(err);
+    });
+});
+
+router.get('/playlist/:userid/:playlistid', (req, res) => {
+
+  const userid = req.params.userid;
+  //console.log(userid);
+  const playlistid = req.params.playlistid;
+  //console.log(playlistid);
+
+  spotifyApi.getPlaylist(userid, playlistid)
+    .then(function(data) {
+      //console.log(data.body);
+      res.status(200).json(data.body);
+    }, function(err) {
+      console.error(err);
+    });
+
+});
+
+
 //Might be a good idea to have endpoints for each type
 router.get('/search/:type/:name', (req, res) => {
 
   //check type for artist, track, album or playlist
-  const type = req.params.type
+  const type = req.params.type;
 
   //track name, artist name etc
-  const name = req.params.name
+  const name = req.params.name;
 
   //redirect according to type
   if(type === 'artist'){
     spotifyApi.searchArtists(name, { limit: 50})
       .then(function(data) {
-        res.status(200).json(data.body.artists);
+        res.status(200).json(data.body);
       }, function(err) {
         console.error(err);
       });
@@ -65,7 +93,7 @@ router.get('/search/:type/:name', (req, res) => {
   else if(type === 'track'){
     spotifyApi.searchTracks(name, { limit: 50})
       .then(function(data) {
-        res.status(200).json(data.body.tracks);
+        res.status(200).json(data.body);
       }, function(err) {
         console.error(err);
       });
@@ -73,7 +101,7 @@ router.get('/search/:type/:name', (req, res) => {
   else if(type === 'album'){
     spotifyApi.searchAlbums(name, { limit: 50})
       .then(function(data) {
-        res.status(200).json(data.body.albums);
+        res.status(200).json(data.body);
       }, function(err) {
         console.error(err);
       });
@@ -82,7 +110,15 @@ router.get('/search/:type/:name', (req, res) => {
   else if(type === 'playlist'){
     spotifyApi.searchPlaylists(name, { limit: 50})
       .then(function(data) {
-        res.status(200).json(data.body.playlists);
+        res.status(200).json(data.body);
+      }, function(err) {
+        console.error(err);
+      });
+  }
+  else if(type === 'all'){
+    spotifyApi.search(name,['artist', 'track', 'album', 'playlist'], { limit: 50})
+      .then(function(data) {
+        res.status(200).json(data.body);
       }, function(err) {
         console.error(err);
       });
@@ -90,9 +126,8 @@ router.get('/search/:type/:name', (req, res) => {
   else{ //default
     res.redirect('/#/');
   }
-
-
 });
+
 
 router.get('/callback', (req, res) => {
   const { code, state } = req.query;
