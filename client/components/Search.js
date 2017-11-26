@@ -1,3 +1,6 @@
+//TODO: show more/less buttons in render X containers
+//also should rework the whole to be a bit more modular. It's getting a bit out of hand
+
 import React, { Component } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { render } from 'react-dom';
@@ -22,21 +25,6 @@ const checkImageUrl = (arr) => {
     return '/default.png';
   }
 }
-
-const getPlaylistFollowers = (userid, playlistid) => {
-  let followers = 0;
-  axios.get(`/playlist/${userid}/${playlistid}`)
-    .then(function(response){
-      //console.log(response.data.followers.total);
-      followers = response.data.followers.total
-    })
-    .catch(function(error){
-      console.log(error);
-    });
-  return followers;
-}
-
-
 //TODO: check that user is authed. As it is search is available via url
 export default class Search extends React.Component {
   constructor(props) {
@@ -49,7 +37,6 @@ export default class Search extends React.Component {
                   artists: [],
                   tracks: [],
                   playlists: [],
-                  resultsToShow: 5,
                 };
 
     this.handleNameChange = this.handleNameChange.bind(this);
@@ -63,7 +50,6 @@ export default class Search extends React.Component {
     axios.get('/me')
       .then(function(response) {
         self.setState({authedUser: response.data.id});
-        //console.log(self.state.authedUser);
       })
       .catch(function(error){
         console.log(error);
@@ -82,22 +68,30 @@ export default class Search extends React.Component {
     this.setState({resultsToShow: this.state.resultsToShow + 5});
   }
 
-
-
-  //${this.state.queryType}
   handleSubmit(event) {
 
     var self = this;
     axios.get(`/search/${this.state.queryType}/${this.state.name}`)
       .then(function (response) {
-        self.setState({queryResult: response.data});
 
-        self.setState({albums: response.data.albums.items});
-        self.setState({artists: response.data.artists.items});
-        self.setState({tracks: response.data.tracks.items});
-        self.setState({playlists: response.data.playlists.items});
+        //since spotify web api search doesn't provide us with playlist followers, we need do do it by hand
+        let arr = response.data.playlists.items.map( (item) => {
+          return axios.get(`/playlist/${item.owner.id}/${item.id}`)
+            .then( (response) => {
+              item.followers = response.data.followers.total;
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        });
 
-        console.log(response.data);
+        //this seems to cause some delay, but afaik there's no really good way to do this. Perhaps on server side?
+        Promise.all(arr).then( () => { 
+          self.setState({queryResult: response.data, albums: response.data.albums.items,
+                         artists: response.data.artists.items, tracks: response.data.tracks.items,
+                         playlists: response.data.playlists.items });
+          console.log(self.state.playlists);
+        })
       })
       .catch(function (error) {
         console.log(error);
@@ -112,7 +106,7 @@ export default class Search extends React.Component {
 
 
     return <div className="grid-x"> {artists.map( function(artists){  return <div className="small-3 cell" key={artists.id}> 
-                                                                          <ul>
+                                                                          <ul className="centeredlist">
                                                                           <li><img src={checkImageUrl(artists.images)} height="150" width="150"/></li>
                                                                           <li>{artists.name}</li>
                                                                           </ul>
@@ -130,26 +124,28 @@ export default class Search extends React.Component {
                                                             <li className="inline"> {tracks.artists[0].name}, </li>
                                                             <li className="inline"> {tracks.album.name} </li>
                                                             <li className="inline" id="duration"> {millisToMinutesAndSeconds(tracks.duration_ms)} </li>
+
                                                             </div>
+
   })} </ul> 
-    
+  
   </div>;
 
 
   }
-  //<button onClick={ function(){ index = index + 5;} }> more... </button>
-
+  
   renderAlbumContainer() {
     let index = 4;
     let albums = this.state.albums.slice(0,index);
 
     return <div className="grid-x"> {albums.map( function(albums){  return <div className="small-3 cell" key={albums.id}> 
-                                                                          <ul>
+                                                                          <ul className="centeredlist">
                                                                           <li><img src={checkImageUrl(albums.images)} height="150" width="150"/></li>
                                                                           <li>{albums.name}</li>
                                                                           <li className="inline">{albums.artists[0].name}</li>
                                                                           </ul>
                                                                          </div> } 
+
       )} </div>;
   }
 
@@ -158,18 +154,16 @@ export default class Search extends React.Component {
       let playlists = this.state.playlists.slice(0,index);
 
       return <div className="grid-x"> {playlists.map( function(playlists){  return <div className="small-3 cell" key={playlists.id}> 
-                                                                            <ul>
+                                                                            <ul className="centeredlist">
                                                                             <li> <img src={checkImageUrl(playlists.images)} height="150" width="150"/> </li>
-                                                                            <li> {playlists.name} </li>
-                                                                            <li> {getPlaylistFollowers(playlists.owner.id, playlists.id)} </li>
+                                                                            <li > {playlists.name} </li>
+                                                                            <li className="inline"> {playlists.followers} FOLLOWERS</li>
                                                                             </ul>
                                                                            </div> } 
         )} </div>;
-    }
+  }
+
   
-
-
-
   render() {
 
     let artists = this.state.artists;
@@ -192,8 +186,8 @@ export default class Search extends React.Component {
           <div className="top-bar-right">
             <ul className="menu">
               <div className="inlinediv">
-                <li id="authed-user">{this.state.authedUser}</li>
-                <li><Logout/></li>
+                <li className="inlinediv" id="authed-user">{this.state.authedUser}</li>
+                <li className="inlinediv"><Logout/></li>
               </div>
             </ul>
           </div>
@@ -262,4 +256,3 @@ export default class Search extends React.Component {
   }
 }
 
-  //              <ul> {data.map( function(data){  return <li key={data.id}> {data.name} </li> } )} </ul>
